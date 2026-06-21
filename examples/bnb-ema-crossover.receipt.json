@@ -1,0 +1,69 @@
+{
+  "receipt_version": "0.1.0",
+  "stratfile": {
+    "name": "bnb-ema-crossover",
+    "content_hash": "sha256:3a67d096ffea8da0d5fb07c51a3dd3115ca79f47aab5a96ea37a32064f2b7bbf",
+    "schema": "https://stratfile.org/schemas/v0.1.0/stratfile.schema.json"
+  },
+  "backtest": {
+    "from": "2025-06-11",
+    "to": "2026-06-10",
+    "windows": 34,
+    "metrics": {
+      "total_return_pct": 23.3817,
+      "sharpe": 0.7838,
+      "sortino": 0.5482,
+      "max_drawdown_pct": 24.9116,
+      "calmar": 0.9414,
+      "n_trades": 67,
+      "n_days": 365,
+      "start_equity": 10000.0,
+      "end_equity": 12338.17
+    },
+    "regime_breakdown": [
+      {
+        "regime": "trending_down",
+        "days": 191,
+        "total_return_pct": 0.0,
+        "mean_daily_ret_pct": 0.0,
+        "worst_day_pct": 0.0
+      },
+      {
+        "regime": "trending_up",
+        "days": 173,
+        "total_return_pct": 23.3817,
+        "mean_daily_ret_pct": 0.1552,
+        "worst_day_pct": -11.5438
+      }
+    ],
+    "monte_carlo": {
+      "p50_max_dd_pct": 24.4282,
+      "p95_max_dd_pct": 42.9438
+    },
+    "benchmark": {
+      "token": "BNB",
+      "buy_hold_return_pct": -11.9527
+    },
+    "kill_switch_fired": true
+  },
+  "x402": {
+    "payment_hash": "stub:99020ac519b95facaac4dc315b993bf2f88526ae2062438ffbd17c260b221b44",
+    "network": "offline",
+    "amount": 0,
+    "payer": null,
+    "mode": "stub"
+  },
+  "x402_payload": {
+    "content_hash": "sha256:3a67d096ffea8da0d5fb07c51a3dd3115ca79f47aab5a96ea37a32064f2b7bbf",
+    "backtest_from": "2025-06-11",
+    "backtest_to": "2026-06-10",
+    "windows": 34
+  },
+  "signed_at": "2026-06-10T08:44:07.838975+00:00",
+  "provenance": "SLSA-L1-style build provenance for trading strategies",
+  "signature": "0x34395932c35f4d4639bee85b49e847cbdcbfc27745c0e570aa040ad5f00b53b11b4aa7f0df4a865638bb1a3a538ff4384e0cd71552117122624f6f9d322a6f4d1c",
+  "signer": {
+    "address": "0xFB76C4B6912bCF358752Fb4b4b15B959EfaDD915",
+    "algorithm": "eth_personal_sign(secp256k1)"
+  }
+}

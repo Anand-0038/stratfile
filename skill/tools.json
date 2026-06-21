@@ -1,0 +1,60 @@
+{
+  "name": "stratfile",
+  "version": "0.1.0",
+  "tools": [
+    {
+      "name": "stratfile_init",
+      "description": "Translate a natural-language strategy idea into a deterministic, schema-validated stratfile.json",
+      "command": "stratfile init \"{prompt}\" --seed {seed}",
+      "inputs": {
+        "prompt": {"type": "string", "required": true},
+        "seed": {"type": "integer", "default": 42}
+      },
+      "outputs": {"stratfile_path": "string", "content_hash": "string"}
+    },
+    {
+      "name": "stratfile_validate",
+      "description": "Validate a stratfile.json against schema v0.1.0 + hard invariants (no look-ahead, drawdown cap, testnet-only)",
+      "command": "stratfile validate {path}",
+      "inputs": {"path": {"type": "string", "required": true}},
+      "outputs": {"valid": "boolean", "problems": "array"}
+    },
+    {
+      "name": "stratfile_backtest",
+      "description": "Walk-forward backtest with regime stratification and Monte-Carlo drawdown bootstrap",
+      "command": "stratfile backtest {path} --windows {windows}",
+      "inputs": {
+        "path": {"type": "string", "required": true},
+        "windows": {"type": "integer", "default": 34}
+      },
+      "outputs": {"metrics": "object", "regime_breakdown": "array", "walk_forward": "array"}
+    },
+    {
+      "name": "stratfile_receipt",
+      "description": "Emit a signed receipt.json: content hash + x402 payment proof + ECDSA signature",
+      "command": "stratfile receipt {path}",
+      "inputs": {"path": {"type": "string", "required": true}},
+      "outputs": {"receipt_path": "string", "content_hash": "string", "payment_hash": "string"}
+    },
+    {
+      "name": "stratfile_verify_receipt",
+      "description": "Verify a receipt against its stratfile: hash recomputation, signature recovery, x402 proof check",
+      "command": "stratfile verify-receipt {stratfile_path} {receipt_path}",
+      "inputs": {
+        "stratfile_path": {"type": "string", "required": true},
+        "receipt_path": {"type": "string", "required": true}
+      },
+      "outputs": {"ok": "boolean", "checks": "object"}
+    },
+    {
+      "name": "stratfile_execute",
+      "description": "Evaluate current regime and fire (or dry-run) one swap on PancakeSwap V3 BSC Testnet via the ERC-8004 agent",
+      "command": "stratfile execute {path} --dry-run",
+      "inputs": {
+        "path": {"type": "string", "required": true},
+        "dry_run": {"type": "boolean", "default": true}
+      },
+      "outputs": {"tx_hash": "string", "bscscan_url": "string", "regime": "string"}
+    }
+  ]
+}

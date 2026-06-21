@@ -1,0 +1,54 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: pip install -e ".[dev]"
+      - name: Lint
+        run: ruff check src tests
+      - name: Tests (hermetic — fixtures only, no live network)
+        run: pytest tests/ -q
+      - name: Schema validates examples
+        run: |
+          stratfile validate examples/btc-fear-greed-dca.stratfile.json
+      - name: Determinism smoke (same prompt + seed = same hash)
+        run: |
+          stratfile init "DCA into BNB when Fear & Greed < 30, rotate to USDT when > 75" --out /tmp/a.json
+          stratfile init "DCA into BNB when Fear & Greed < 30, rotate to USDT when > 75" --out /tmp/b.json
+          python -c "
+          import json
+          from stratfile.canonical import content_hash
+          a = content_hash(json.load(open('/tmp/a.json')))
+          b = content_hash(json.load(open('/tmp/b.json')))
+          assert a == b, f'{a} != {b}'
+          print('determinism ok:', a)
+          "
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker compose build
+      - name: Boot stack and probe the proof loop
+        run: |
+          docker compose up -d
+          for i in $(seq 1 30); do
+            curl -sf localhost:8080/health && break || sleep 2
+          done
+          curl -sf localhost:8080/health
+          SID=$(curl -sf localhost:8080/strategies | python3 -c "import sys,json;print(json.load(sys.stdin)[0]['strategy_id'])")
+          curl -sf -X POST localhost:8080/strategies/$SID/evaluate > /dev/null
+          curl -sf -X POST localhost:8080/strategies/$SID/execute -H 'content-type: application/json' -d '{"dry_run": true}' > /dev/null
+          docker compose down -v

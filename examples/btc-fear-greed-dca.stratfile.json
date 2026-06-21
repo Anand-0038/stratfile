@@ -1,0 +1,45 @@
+{
+	"$schema": "https://stratfile.org/schemas/v0.1.0/stratfile.schema.json",
+	"version": "0.1.0",
+	"name": "btc-fear-greed-dca",
+	"description": "DCA into BNB when Fear & Greed < 30 (extreme fear), rotate to USDT when > 75 (extreme greed), hold otherwise. Reference strategy demonstrating the Stratfile spec end-to-end.",
+	"author": "Anand-0037",
+	"universe": ["BNB", "USDT"],
+	"data_sources": [
+		{ "id": "fng", "provider": "cmc", "tool": "fear_greed_index", "shift": -1 },
+		{ "id": "bnb_price", "provider": "cmc", "tool": "price_quote", "args": { "symbol": "BNB" }, "shift": -1 }
+	],
+	"signals": [
+		{ "id": "extreme_fear", "type": "threshold", "source_ref": "fng", "params": { "op": "lt", "value": 30 } },
+		{ "id": "extreme_greed", "type": "threshold", "source_ref": "fng", "params": { "op": "gt", "value": 75 } }
+	],
+	"regimes": [
+		{ "id": "risk_on", "label": "Risk-On (DCA)", "condition": "extreme_fear" },
+		{ "id": "risk_off", "label": "Risk-Off (Rotate to USDT)", "condition": "extreme_greed" },
+		{ "id": "neutral", "label": "Neutral (Hold)", "condition": "!extreme_fear && !extreme_greed" }
+	],
+	"rules": [
+		{ "when_regime": "risk_on", "action": "buy", "target": "BNB", "size_pct": 5, "cooldown_h": 24 },
+		{ "when_regime": "risk_off", "action": "rotate_to", "target": "USDT", "size_pct": 100, "cooldown_h": 24 },
+		{ "when_regime": "neutral", "action": "hold", "size_pct": 0, "cooldown_h": 0 }
+	],
+	"guardrails": {
+		"max_drawdown_pct": 20,
+		"per_trade_cap_pct": 10,
+		"daily_turnover_cap_pct": 25,
+		"slippage_cap_bps": 150,
+		"cooldown_min": 30,
+		"kill_switch_target": "USDT"
+	},
+	"execution": {
+		"network": "bsc-testnet",
+		"dex": "pancakeswap-v3-testnet",
+		"identity_contract": "ERC-8004",
+		"paymaster": "megafuel",
+		"gas_strategy": "paymaster-first"
+	},
+	"metadata": {
+		"created_at": "2026-06-09T14:53:00+05:30",
+		"tags": ["dca", "fear-greed", "bnb"]
+	}
+}

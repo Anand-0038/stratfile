@@ -1,0 +1,41 @@
+{
+	"$schema": "https://stratfile.org/schemas/v0.1.0/stratfile.schema.json",
+	"version": "0.1.0",
+	"name": "bnb-mean-reversion",
+	"description": "Mean-reversion on BNB price: when the 30-day z-score exceeds 2 standard deviations (rare extreme), de-risk to USDT; resume holding BNB when price returns to its normal range. Reference strategy demonstrating the zscore signal type.",
+	"author": "Anand-0037",
+	"universe": ["BNB", "USDT"],
+	"data_sources": [
+		{ "id": "bnb_price", "provider": "cmc", "tool": "price_quote", "args": { "symbol": "BNB" }, "shift": -1 }
+	],
+	"signals": [
+		{ "id": "price_extreme", "type": "zscore", "source_ref": "bnb_price", "params": { "window": 30, "value": 2.0 } }
+	],
+	"regimes": [
+		{ "id": "stretched", "label": "Price Stretched (Rotate to USDT)", "condition": "price_extreme" },
+		{ "id": "normal", "label": "Normal Range (Hold BNB)", "condition": "!price_extreme" }
+	],
+	"rules": [
+		{ "when_regime": "stretched", "action": "rotate_to", "target": "USDT", "size_pct": 100, "cooldown_h": 24 },
+		{ "when_regime": "normal", "action": "buy", "target": "BNB", "size_pct": 5, "cooldown_h": 24 }
+	],
+	"guardrails": {
+		"max_drawdown_pct": 18,
+		"per_trade_cap_pct": 10,
+		"daily_turnover_cap_pct": 25,
+		"slippage_cap_bps": 150,
+		"cooldown_min": 30,
+		"kill_switch_target": "USDT"
+	},
+	"execution": {
+		"network": "bsc-testnet",
+		"dex": "pancakeswap-v3-testnet",
+		"identity_contract": "ERC-8004",
+		"paymaster": "megafuel",
+		"gas_strategy": "paymaster-first"
+	},
+	"metadata": {
+		"created_at": "2026-06-10T08:36:00+00:00",
+		"tags": ["zscore", "mean-reversion", "bnb"]
+	}
+}

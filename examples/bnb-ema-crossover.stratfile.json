@@ -1,0 +1,41 @@
+{
+	"$schema": "https://stratfile.org/schemas/v0.1.0/stratfile.schema.json",
+	"version": "0.1.0",
+	"name": "bnb-ema-crossover",
+	"description": "Trend-follow BNB using a fast/slow moving-average crossover. Buy BNB when the 20-day average crosses above the 50-day average; rotate to USDT when it crosses below. Reference strategy demonstrating the crossover signal type.",
+	"author": "Anand-0037",
+	"universe": ["BNB", "USDT"],
+	"data_sources": [
+		{ "id": "bnb_price", "provider": "cmc", "tool": "price_quote", "args": { "symbol": "BNB" }, "shift": -1 }
+	],
+	"signals": [
+		{ "id": "trend_up", "type": "crossover", "source_ref": "bnb_price", "params": { "fast": 20, "slow": 50 } }
+	],
+	"regimes": [
+		{ "id": "trending_up", "label": "Trending Up (Accumulate)", "condition": "trend_up" },
+		{ "id": "trending_down", "label": "Trending Down (Rotate to USDT)", "condition": "!trend_up" }
+	],
+	"rules": [
+		{ "when_regime": "trending_up", "action": "buy", "target": "BNB", "size_pct": 10, "cooldown_h": 24 },
+		{ "when_regime": "trending_down", "action": "rotate_to", "target": "USDT", "size_pct": 100, "cooldown_h": 24 }
+	],
+	"guardrails": {
+		"max_drawdown_pct": 20,
+		"per_trade_cap_pct": 15,
+		"daily_turnover_cap_pct": 30,
+		"slippage_cap_bps": 150,
+		"cooldown_min": 30,
+		"kill_switch_target": "USDT"
+	},
+	"execution": {
+		"network": "bsc-testnet",
+		"dex": "pancakeswap-v3-testnet",
+		"identity_contract": "ERC-8004",
+		"paymaster": "megafuel",
+		"gas_strategy": "paymaster-first"
+	},
+	"metadata": {
+		"created_at": "2026-06-10T08:36:00+00:00",
+		"tags": ["crossover", "trend-follow", "bnb"]
+	}
+}

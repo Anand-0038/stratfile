@@ -1,0 +1,76 @@
+{
+  "receipt_version": "0.1.0",
+  "stratfile": {
+    "name": "btc-fear-greed-dca",
+    "content_hash": "sha256:a2221e95868574f300de68af6ec2758548236f2bc505d9ee0c2a8e8752824431",
+    "schema": "https://stratfile.org/schemas/v0.1.0/stratfile.schema.json"
+  },
+  "backtest": {
+    "from": "2025-06-11",
+    "to": "2026-06-10",
+    "windows": 34,
+    "metrics": {
+      "total_return_pct": -22.0027,
+      "sharpe": -1.1504,
+      "sortino": -0.7881,
+      "max_drawdown_pct": 23.7601,
+      "calmar": -0.9283,
+      "n_trades": 91,
+      "n_days": 365,
+      "start_equity": 10000.0,
+      "end_equity": 7799.73
+    },
+    "regime_breakdown": [
+      {
+        "regime": "neutral",
+        "days": 168,
+        "total_return_pct": -14.2276,
+        "mean_daily_ret_pct": -0.0898,
+        "worst_day_pct": -4.0299
+      },
+      {
+        "regime": "risk_off",
+        "days": 1,
+        "total_return_pct": 0.0,
+        "mean_daily_ret_pct": 0.0,
+        "worst_day_pct": 0.0
+      },
+      {
+        "regime": "risk_on",
+        "days": 195,
+        "total_return_pct": -9.0647,
+        "mean_daily_ret_pct": -0.0397,
+        "worst_day_pct": -9.5572
+      }
+    ],
+    "monte_carlo": {
+      "p50_max_dd_pct": 28.3555,
+      "p95_max_dd_pct": 47.2398
+    },
+    "benchmark": {
+      "token": "BNB",
+      "buy_hold_return_pct": -11.9527
+    },
+    "kill_switch_fired": true
+  },
+  "x402": {
+    "payment_hash": "stub:34720112bc19bda0796fdefb9fea2575a3f0599b0fce9c3b139b36753a2e931f",
+    "network": "offline",
+    "amount": 0,
+    "payer": null,
+    "mode": "stub"
+  },
+  "x402_payload": {
+    "content_hash": "sha256:a2221e95868574f300de68af6ec2758548236f2bc505d9ee0c2a8e8752824431",
+    "backtest_from": "2025-06-11",
+    "backtest_to": "2026-06-10",
+    "windows": 34
+  },
+  "signed_at": "2026-06-10T07:31:58.842887+00:00",
+  "provenance": "SLSA-L1-style build provenance for trading strategies",
+  "signature": "0xe6f049bc8570aada67161f289a1ad48df5531dcf7f5d6b590ba2ce89399c559079cfab45528c962046cf89f04e425e83c346554d9e5a6af8942eefc1dde8a1d61b",
+  "signer": {
+    "address": "0xee35BDf8b62Bd60672512250735ECFAA4ABa129a",
+    "algorithm": "eth_personal_sign(secp256k1)"
+  }
+}

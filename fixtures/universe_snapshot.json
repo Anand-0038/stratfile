@@ -1,0 +1,175 @@
+{
+  "source": "fixture-snapshot 2026-06-10",
+  "tokens": [
+    {
+      "symbol": "BNB",
+      "name": "BNB",
+      "is_active": 1
+    },
+    {
+      "symbol": "BTC",
+      "name": "BTC",
+      "is_active": 1
+    },
+    {
+      "symbol": "ETH",
+      "name": "ETH",
+      "is_active": 1
+    },
+    {
+      "symbol": "USDT",
+      "name": "USDT",
+      "is_active": 1
+    },
+    {
+      "symbol": "USDC",
+      "name": "USDC",
+      "is_active": 1
+    },
+    {
+      "symbol": "BUSD",
+      "name": "BUSD",
+      "is_active": 1
+    },
+    {
+      "symbol": "CAKE",
+      "name": "CAKE",
+      "is_active": 1
+    },
+    {
+      "symbol": "SOL",
+      "name": "SOL",
+      "is_active": 1
+    },
+    {
+      "symbol": "XRP",
+      "name": "XRP",
+      "is_active": 1
+    },
+    {
+      "symbol": "ADA",
+      "name": "ADA",
+      "is_active": 1
+    },
+    {
+      "symbol": "DOGE",
+      "name": "DOGE",
+      "is_active": 1
+    },
+    {
+      "symbol": "AVAX",
+      "name": "AVAX",
+      "is_active": 1
+    },
+    {
+      "symbol": "ATOM",
+      "name": "ATOM",
+      "is_active": 1
+    },
+    {
+      "symbol": "FIL",
+      "name": "FIL",
+      "is_active": 1
+    },
+    {
+      "symbol": "FET",
+      "name": "FET",
+      "is_active": 1
+    },
+    {
+      "symbol": "INJ",
+      "name": "INJ",
+      "is_active": 1
+    },
+    {
+      "symbol": "PENDLE",
+      "name": "PENDLE",
+      "is_active": 1
+    },
+    {
+      "symbol": "AAVE",
+      "name": "AAVE",
+      "is_active": 1
+    },
+    {
+      "symbol": "LDO",
+      "name": "LDO",
+      "is_active": 1
+    },
+    {
+      "symbol": "SUSHI",
+      "name": "SUSHI",
+      "is_active": 1
+    },
+    {
+      "symbol": "1INCH",
+      "name": "1INCH",
+      "is_active": 1
+    },
+    {
+      "symbol": "ZETA",
+      "name": "ZETA",
+      "is_active": 1
+    },
+    {
+      "symbol": "AXS",
+      "name": "AXS",
+      "is_active": 1
+    },
+    {
+      "symbol": "FLOKI",
+      "name": "FLOKI",
+      "is_active": 1
+    },
+    {
+      "symbol": "SHIB",
+      "name": "SHIB",
+      "is_active": 1
+    },
+    {
+      "symbol": "BONK",
+      "name": "BONK",
+      "is_active": 1
+    },
+    {
+      "symbol": "KAVA",
+      "name": "KAVA",
+      "is_active": 1
+    },
+    {
+      "symbol": "ROSE",
+      "name": "ROSE",
+      "is_active": 1
+    },
+    {
+      "symbol": "ZIL",
+      "name": "ZIL",
+      "is_active": 1
+    },
+    {
+      "symbol": "YFI",
+      "name": "YFI",
+      "is_active": 1
+    },
+    {
+      "symbol": "COMP",
+      "name": "COMP",
+      "is_active": 1
+    },
+    {
+      "symbol": "SNX",
+      "name": "SNX",
+      "is_active": 1
+    },
+    {
+      "symbol": "BAT",
+      "name": "BAT",
+      "is_active": 1
+    },
+    {
+      "symbol": "APE",
+      "name": "APE",
+      "is_active": 1
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+	"$id": "https://stratfile.org/schemas/v0.1.0/stratfile.schema.json",
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"title": "Stratfile",
+	"description": "Open file format for trading strategies. v0.1.0 is the REFERENCE PROFILE: enum-locked values (provider=cmc, network=bsc-testnet, dex=pancakeswap-v3-testnet, paymaster=megafuel) are the currently-accepted values of this profile, not limits of the format. v0.2.0 widens each enum behind the same field names without breaking v0.1.0 documents (semver: additive only within 0.x).",
+	"type": "object",
+	"required": ["$schema", "version", "name", "description", "author", "universe", "data_sources", "signals", "regimes", "rules", "guardrails", "execution"],
+	"properties": {
+		"$schema": { "type": "string", "const": "https://stratfile.org/schemas/v0.1.0/stratfile.schema.json" },
+		"version": { "type": "string", "const": "0.1.0" },
+		"name": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,63}$" },
+		"description": { "type": "string", "maxLength": 1024 },
+		"author": { "type": "string", "minLength": 1, "maxLength": 128 },
+		"universe": { "type": "array", "items": { "type": "string" }, "minItems": 1, "maxItems": 32 },
+		"data_sources": { "type": "array", "items": { "$ref": "#/$defs/dataSource" }, "minItems": 1 },
+		"signals": { "type": "array", "items": { "$ref": "#/$defs/signal" }, "minItems": 1 },
+		"regimes": { "type": "array", "items": { "$ref": "#/$defs/regime" }, "minItems": 1 },
+		"rules": { "type": "array", "items": { "$ref": "#/$defs/rule" }, "minItems": 1 },
+		"guardrails": { "$ref": "#/$defs/guardrails" },
+		"execution": { "$ref": "#/$defs/execution" },
+		"metadata": { "type": "object" }
+	},
+	"$defs": {
+		"dataSource": {
+			"type": "object",
+			"required": ["id", "provider", "tool", "shift"],
+			"properties": {
+				"id": { "type": "string" },
+				"provider": { "type": "string", "enum": ["cmc"], "description": "v0.1.0 reference-profile value; provider registry expands in v0.2.0 (additive)" },
+				"tool": { "type": "string" },
+				"args": { "type": "object" },
+				"shift": { "type": "integer", "maximum": -1 }
+			}
+		},
+		"signal": {
+			"type": "object",
+			"required": ["id", "type", "source_ref"],
+			"properties": {
+				"id": { "type": "string" },
+				"type": { "type": "string", "enum": ["threshold", "crossover", "zscore", "regime_label"] },
+				"params": { "type": "object" },
+				"source_ref": { "type": "string" }
+			}
+		},
+		"regime": {
+			"type": "object",
+			"required": ["id", "label", "condition"],
+			"properties": {
+				"id": { "type": "string" },
+				"label": { "type": "string" },
+				"condition": { "type": "string" }
+			}
+		},
+		"rule": {
+			"type": "object",
+			"required": ["when_regime", "action", "size_pct"],
+			"properties": {
+				"when_regime": { "type": "string" },
+				"action": { "type": "string", "enum": ["buy", "sell", "hold", "rotate_to"] },
+				"target": { "type": "string" },
+				"size_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+				"cooldown_h": { "type": "number", "minimum": 0 }
+			}
+		},
+		"guardrails": {
+			"type": "object",
+			"required": ["max_drawdown_pct", "per_trade_cap_pct", "daily_turnover_cap_pct", "slippage_cap_bps", "kill_switch_target"],
+			"properties": {
+				"max_drawdown_pct": { "type": "number", "minimum": 0, "maximum": 25 },
+				"per_trade_cap_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+				"daily_turnover_cap_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+				"slippage_cap_bps": { "type": "integer", "minimum": 0, "maximum": 1000 },
+				"cooldown_min": { "type": "integer", "minimum": 0 },
+				"kill_switch_target": { "type": "string" }
+			}
+		},
+		"execution": {
+			"type": "object",
+			"required": ["network", "dex", "identity_contract", "paymaster"],
+			"properties": {
+				"network": { "type": "string", "enum": ["bsc-testnet"], "description": "v0.1.0 is testnet-only BY DESIGN (safety invariant); mainnet networks gated behind v0.2.0 + audit" },
+				"dex": { "type": "string", "enum": ["pancakeswap-v3-testnet"], "description": "v0.1.0 reference-profile value; any executor that speaks this schema can register its venue in v0.2.0" },
+				"identity_contract": { "type": "string" },
+				"paymaster": { "type": "string", "enum": ["megafuel"], "description": "v0.1.0 reference-profile value; paymaster registry expands in v0.2.0 (additive)" },
+				"gas_strategy": { "type": "string" }
+			}
+		}
+	}
+}

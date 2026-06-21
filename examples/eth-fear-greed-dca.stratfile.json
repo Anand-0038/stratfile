@@ -1,0 +1,45 @@
+{
+	"$schema": "https://stratfile.org/schemas/v0.1.0/stratfile.schema.json",
+	"version": "0.1.0",
+	"name": "eth-fear-greed-dca",
+	"description": "DCA into ETH when Fear & Greed < 25 (extreme fear), rotate to USDT when > 80 (extreme greed), hold otherwise. Proves the Stratfile spec is asset-agnostic — same schema, different primary asset, no code changes.",
+	"author": "Anand-0037",
+	"universe": ["ETH", "USDT"],
+	"data_sources": [
+		{ "id": "fng", "provider": "cmc", "tool": "fear_greed_index", "shift": -1 },
+		{ "id": "eth_price", "provider": "cmc", "tool": "price_quote", "args": { "symbol": "ETH" }, "shift": -1 }
+	],
+	"signals": [
+		{ "id": "extreme_fear", "type": "threshold", "source_ref": "fng", "params": { "op": "lt", "value": 25 } },
+		{ "id": "extreme_greed", "type": "threshold", "source_ref": "fng", "params": { "op": "gt", "value": 80 } }
+	],
+	"regimes": [
+		{ "id": "risk_on", "label": "Risk-On (DCA ETH)", "condition": "extreme_fear" },
+		{ "id": "risk_off", "label": "Risk-Off (Rotate to USDT)", "condition": "extreme_greed" },
+		{ "id": "neutral", "label": "Neutral (Hold)", "condition": "!extreme_fear && !extreme_greed" }
+	],
+	"rules": [
+		{ "when_regime": "risk_on", "action": "buy", "target": "ETH", "size_pct": 5, "cooldown_h": 24 },
+		{ "when_regime": "risk_off", "action": "rotate_to", "target": "USDT", "size_pct": 100, "cooldown_h": 24 },
+		{ "when_regime": "neutral", "action": "hold", "size_pct": 0, "cooldown_h": 0 }
+	],
+	"guardrails": {
+		"max_drawdown_pct": 20,
+		"per_trade_cap_pct": 10,
+		"daily_turnover_cap_pct": 25,
+		"slippage_cap_bps": 150,
+		"cooldown_min": 30,
+		"kill_switch_target": "USDT"
+	},
+	"execution": {
+		"network": "bsc-testnet",
+		"dex": "pancakeswap-v3-testnet",
+		"identity_contract": "ERC-8004",
+		"paymaster": "megafuel",
+		"gas_strategy": "paymaster-first"
+	},
+	"metadata": {
+		"created_at": "2026-06-10T08:36:00+00:00",
+		"tags": ["dca", "fear-greed", "eth"]
+	}
+}

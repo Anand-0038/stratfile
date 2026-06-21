@@ -1,0 +1,69 @@
+{
+  "receipt_version": "0.1.0",
+  "stratfile": {
+    "name": "eth-fear-greed-dca",
+    "content_hash": "sha256:932639f4a674f32f800ae81d46fd0f891a1f7a41888dcf8bf276d12499b01dde",
+    "schema": "https://stratfile.org/schemas/v0.1.0/stratfile.schema.json"
+  },
+  "backtest": {
+    "from": "2025-06-11",
+    "to": "2026-06-10",
+    "windows": 34,
+    "metrics": {
+      "total_return_pct": -23.4092,
+      "sharpe": -1.0414,
+      "sortino": -0.6861,
+      "max_drawdown_pct": 25.5744,
+      "calmar": -0.9175,
+      "n_trades": 54,
+      "n_days": 365,
+      "start_equity": 10000.0,
+      "end_equity": 7659.08
+    },
+    "regime_breakdown": [
+      {
+        "regime": "neutral",
+        "days": 224,
+        "total_return_pct": -28.9903,
+        "mean_daily_ret_pct": -0.1467,
+        "worst_day_pct": -7.1824
+      },
+      {
+        "regime": "risk_on",
+        "days": 140,
+        "total_return_pct": 7.8596,
+        "mean_daily_ret_pct": 0.0634,
+        "worst_day_pct": -9.3239
+      }
+    ],
+    "monte_carlo": {
+      "p50_max_dd_pct": 32.4383,
+      "p95_max_dd_pct": 51.5051
+    },
+    "benchmark": {
+      "token": "ETH",
+      "buy_hold_return_pct": -41.3864
+    },
+    "kill_switch_fired": true
+  },
+  "x402": {
+    "payment_hash": "stub:24842ec692b8c4e6d51af2045326649dd71ddc98188e7d8bc5205f632025fcf6",
+    "network": "offline",
+    "amount": 0,
+    "payer": null,
+    "mode": "stub"
+  },
+  "x402_payload": {
+    "content_hash": "sha256:932639f4a674f32f800ae81d46fd0f891a1f7a41888dcf8bf276d12499b01dde",
+    "backtest_from": "2025-06-11",
+    "backtest_to": "2026-06-10",
+    "windows": 34
+  },
+  "signed_at": "2026-06-10T08:44:10.452010+00:00",
+  "provenance": "SLSA-L1-style build provenance for trading strategies",
+  "signature": "0x7e45d858c37667ef9dbb4e911c957dec4575c3e1140599b79a378acc9278d3bc40f8fde30301fb2940897fdaf43a78a0001d331e79045f731128ba35a4ab7f4c1b",
+  "signer": {
+    "address": "0xFB76C4B6912bCF358752Fb4b4b15B959EfaDD915",
+    "algorithm": "eth_personal_sign(secp256k1)"
+  }
+}

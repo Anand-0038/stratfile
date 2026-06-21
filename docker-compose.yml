@@ -1,0 +1,51 @@
+services:
+  executor:
+    build: .
+    command: stratfile serve --port 8080 --host 0.0.0.0
+    ports:
+      - "8080:8080"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DUCKDB_PATH: /data/stratfile.duckdb
+    volumes:
+      - duckdb-data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8080/health').raise_for_status()"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  dashboard:
+    build: .
+    command: stratfile dashboard --port 8501 --host 0.0.0.0
+    ports:
+      - "8501:8501"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      EXECUTOR_URL: http://executor:8080
+      DUCKDB_PATH: /data/stratfile.duckdb
+    volumes:
+      - duckdb-data:/data
+    depends_on:
+      executor:
+        condition: service_healthy
+
+  # One-shot CLI helper:  docker compose run --rm cli stratfile init "..."
+  cli:
+    build: .
+    profiles: ["tools"]
+    entrypoint: []
+    command: ["bash"]
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - duckdb-data:/data
+      - ./examples:/app/examples
+
+volumes:
+  duckdb-data:
